@@ -1,0 +1,65 @@
+<p id="notice"><%= notice %></p>
+
+<% start_date = params.fetch(:start_date, Date.today).to_date %>
+<% date_range = start_date.beginning_of_month.beginning_of_week..start_date.end_of_month.end_of_week %>
+
+<h1 class="text-center">Events Listing <small><%= start_date.strftime '%B %Y' %></small></h1>
+
+<table class="calendar-index table table-striped table-bordered">
+  <thead>
+    <tr>
+      <% I18n.t('date.abbr_day_names').each do |dayname| %>
+        <th><%= dayname %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% date_range.each_slice(7) do |week| %>
+      <tr>
+        <% week.each do |day| %>
+          <% day_class = (day.month == start_date.month) ? "in-month" : "out-of-month" %>
+          <td class="<%= day_class %>"><%= day.day %>
+            <% @events.select { |e| e.start_time.to_date <= day && e.end_time.to_date >= day }.each do |ev| %>
+              <p><%= ev.description %></p>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+  
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Location</th>
+      <th>Time</th>
+      <th colspan="3">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @events.each do |event| %>
+      <tr>
+        <td><%= event.description %></td>
+        <td><%= event.location %></td>
+        <td>  
+          <% if event.allday? %>
+            All Day <%= event.start_time.strftime( "%d %b %Y")%>
+          <% else %>
+            <%= event.start_time.to_s :short %> to
+            <%= event.end_time.to_s :short %>
+          <% end %>
+        </td>
+        <td><%= link_to 'Show', event %></td>
+        <td><%= link_to 'Edit', edit_event_path(event) %></td>
+        <td><%= link_to 'Delete', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Event', new_event_path %>

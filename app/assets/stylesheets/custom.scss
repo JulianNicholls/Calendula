@@ -1,0 +1,28 @@
+// Place all the styles related to the events controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+    padding-top: 70px;
+}
+
+#logo {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.out-of-month {
+    color: #999;
+}
+
+table.calendar-index {
+    th {
+        text-align: center;
+    }
+    
+    td {
+        text-align: center;
+        min-height: 3ex;
+    }
+}
