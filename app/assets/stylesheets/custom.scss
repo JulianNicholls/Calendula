@@ -6,6 +6,14 @@ body {
     padding-top: 70px;
 }
 
+h1 {
+    text-align: center;
+}
+
+form.event-form {
+    margin-top: 40px;
+}
+
 #logo {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -20,7 +28,7 @@ table.calendar-index {
     th {
         text-align: center;
     }
-    
+
     td {
         text-align: center;
         min-height: 3ex;

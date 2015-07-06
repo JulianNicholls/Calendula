@@ -5,7 +5,7 @@
 
 <h1 class="text-center">Events Listing <small><%= start_date.strftime '%B %Y' %></small></h1>
 
-<table class="calendar-index table table-striped table-bordered">
+<table class="calendar-index table table-bordered">
   <thead>
     <tr>
       <% I18n.t('date.abbr_day_names').each do |dayname| %>
@@ -17,9 +17,13 @@
     <% date_range.each_slice(7) do |week| %>
       <tr>
         <% week.each do |day| %>
-          <% day_class = (day.month == start_date.month) ? "in-month" : "out-of-month" %>
-          <td class="<%= day_class %>"><%= day.day %>
-            <% @events.select { |e| e.start_time.to_date <= day && e.end_time.to_date >= day }.each do |ev| %>
+          <% day_classes = (day.month == start_date.month) ? "" : "out-of-month" %>
+          <% day_events = @events.select { |e| e.start_time.to_date <= day && e.end_time.to_date >= day } %>
+          <% if day_events.any? %>
+            <% day_classes << " info" %>
+          <% end %>
+          <td class="<%= day_classes %>"><h4><%= day.day %></h4>
+            <% day_events.each do |ev| %>
               <p><%= ev.description %></p>
             <% end %>
           </td>
@@ -28,7 +32,7 @@
     <% end %>
   </tbody>
 </table>
-  
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -44,7 +48,7 @@
       <tr>
         <td><%= event.description %></td>
         <td><%= event.location %></td>
-        <td>  
+        <td>
           <% if event.allday? %>
             All Day <%= event.start_time.strftime( "%d %b %Y")%>
           <% else %>
@@ -52,9 +56,9 @@
             <%= event.end_time.to_s :short %>
           <% end %>
         </td>
-        <td><%= link_to 'Show', event %></td>
-        <td><%= link_to 'Edit', edit_event_path(event) %></td>
-        <td><%= link_to 'Delete', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td class="info"><%= link_to 'Show', event %></td>
+        <td class="info"><%= link_to 'Edit', edit_event_path(event) %></td>
+        <td class="danger"><%= link_to 'Delete', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
